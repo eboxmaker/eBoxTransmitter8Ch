@@ -32,7 +32,7 @@ typedef struct
     uint8_t     head[2];
     DataU16_t   id;
     uint8_t     ch;
-    uint8_t     ack;
+    DdcAck_t    ack;
     DataU16_t   payload_len;
     uint8_t     payload[DDC_MAX_PAYLOAD_LENGTH];
     DataU16_t   crc;

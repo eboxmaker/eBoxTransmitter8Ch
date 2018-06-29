@@ -5,14 +5,14 @@
 void ebox_init(void)
 {
     #ifdef __CC_ARM
-        ebox_heap_init((void*)STM32_SRAM_BEGIN, (void*)STM32_SRAM_END);
+        ebox_heap_init((void*)MCU_SRAM_BEGIN, (void*)MCU_SRAM_END);
     #elif __ICCARM__
         ebox_heap_init(__segment_end("HEAP"), (void*)STM32_SRAM_END);
     #else
         ebox_heap_init((void*)&__bss_end, (void*)STM32_SRAM_END);
     #endif
-//    interrupts  = __enable_irq;
-//    no_interrupts = __disable_irq;
+    interrupts  = __enable_irq;
+    no_interrupts = __disable_irq;
     delay_ms    = mcu_delay_ms;
     delay_us    = mcu_delay_us;
     micros      = mcu_micros;

@@ -1,14 +1,16 @@
 #include "ebox_core.h"
 
-extern "C"{
+ extern "C" {
+
+void        (*interrupts)(void);
+int         (*no_interrupts)(void);
 void        (*ebox_reset)();
 uint64_t    (*micros)();
 uint64_t    (*millis)();
 void        (*delay_ms)(uint64_t ms);
 void        (*delay_us)(uint64_t ms);
-//void        (*interrupts)(void);
-//int         (*no_interrupts)(void);
 
+ 
 Cpu_t cpu;
 }
 

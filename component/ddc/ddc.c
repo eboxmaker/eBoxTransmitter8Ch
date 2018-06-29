@@ -1,5 +1,4 @@
 #include "ddc.h"
-#include "mcu.h"
 DdcNode_t list_send;
 DdcNode_t list_wait_ack;
 DdcCallBack_t ddc_callback_ch[255] = {0};
@@ -82,7 +81,7 @@ void ddc_recv_process()
                 ddc_recv_state = DDC_ACK;
                 break;
             case DDC_ACK:
-                recv_frame.ack = ch;
+                recv_frame.ack = (DdcAck_t)ch;
                 ddc_recv_state = DDC_LEN;
                 break;
             case DDC_LEN:
@@ -222,9 +221,9 @@ uint16_t ddc_buf_to_frame(DdcFrame_t *frame,uint8_t *src)
     frame->id.byte[0]   = src[i++];
     frame->id.byte[1]   = src[i++];
     
-    frame->ch         = src[i++];// ch
+    frame->ch           = src[i++];// ch
     
-    frame->ack          = src[i++];//ack no need
+    frame->ack          = (DdcAck_t)src[i++];//ack no need
     
     frame->payload_len.byte[0] = src[i++];
     frame->payload_len.byte[1] = src[i++];
@@ -242,7 +241,7 @@ uint16_t ddc_get_id()
 }
 uint8_t* ddc_nonblocking(uint8_t *data,uint16_t data_len,DdcAck_t ack,uint8_t ch )
 {
-    uint16_t i = 0,j = 0, k = 0; 
+    uint16_t i = 0, k = 0; 
     uint8_t *dst = (uint8_t *)ebox_malloc(data_len + 10);
     
     DataU16_t payload_len;
@@ -282,7 +281,7 @@ uint8_t* ddc_nonblocking(uint8_t *data,uint16_t data_len,DdcAck_t ack,uint8_t ch
 
 uint16_t ddc_make_frame(uint8_t *dst,uint8_t *data,uint16_t data_len,DdcAck_t ack,uint8_t ch )
 {
-    uint16_t i = 0,j = 0, k = 0; 
+    uint16_t i = 0, k = 0; 
     
     
     DataU16_t payload_len;

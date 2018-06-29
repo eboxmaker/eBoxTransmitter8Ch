@@ -32,15 +32,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "stm32f10x.h"
 #include "ebox_type.h"
 #include "mcu_config.h"
-
-#define interrupts() 		__enable_irq()//允许所有中断
-#define no_interrupts() 	__disable_irq()//禁止所有中断
-	
-
-
+#include "rcc.h"
+#include "nvic.h"
 
 
 /*!< 2 bits for pre-emption priority
