@@ -16,10 +16,10 @@ Ads1118::Ads1118(Gpio *cs,Spi *spi)
 
     cfg.bit.ss = 0;
     cfg.bit.mux = ADC_AIN0;
-    cfg.bit.pga = PGA6144;
+    cfg.bit.pga = PGA4096;
     cfg.bit.mode = MODE_CONTINU;
     
-    cfg.bit.dr = DR_860;
+    cfg.bit.dr = DR_250;
     cfg.bit.ts_mode = TS_MODE_ADC;
     cfg.bit.pu_en = PU_EN;
     
@@ -60,13 +60,13 @@ bool Ads1118::self_test()
 uint16_t Ads1118::read(uint8_t ch)
 {
     uint32_t last = millis();
-    uint16_t value;
+    uint16_t value = 0;
     //更新配置
     if(cfg.bit.mux != ch)
     {
         cfg.bit.mux = ch;
         update_cfg(&cfg);
-        delay_ms(10);
+        delay_ms(40);
     }
     //读取相应通道值
     spi->take_spi_right(&config);
@@ -74,14 +74,28 @@ uint16_t Ads1118::read(uint8_t ch)
     last = millis();
     while(miso->read() == 1)
     {   
-        if(millis() - last > 10)
+        if(millis() - last > 20)
             break;
     }
     value |= spi->transfer(0xff) << 8;
     value |= spi->transfer(0xff);
     cs->set();
     spi->release_spi_right();
-    return value;
+    
+     value = 0;
+    //读取相应通道值
+    spi->take_spi_right(&config);
+    cs->reset();
+    last = millis();
+    while(miso->read() == 1)
+    {   
+        if(millis() - last > 20)
+            break;
+    }
+    value |= spi->transfer(0xff) << 8;
+    value |= spi->transfer(0xff);
+    cs->set();
+    spi->release_spi_right();    return (value);
 }
 AdsConfig_t Ads1118::update_cfg(AdsConfig_t *cfg)
 {
@@ -93,7 +107,7 @@ AdsConfig_t Ads1118::update_cfg(AdsConfig_t *cfg)
 
     while(miso->read() == 1)
     {   
-        if(millis() - last > 10)
+        if(millis() - last > 20)
             break;
     }
     spi->write(cfg->byte[0]);
@@ -119,15 +133,14 @@ double Ads1118::read_voltage(uint8_t ch)
 
 float Ads1118::read_average(uint8_t ch)
 {
-    float sum = 0;
-    for(int i = 0; i < 20; i++)
+    double sum = 0;
+    for(int i = 0; i < 40; i++)
     {
         sum += read(ch);
-        sum = sum;
-        //delay_ms(10);
+//        delay_ms(10);
         //uart3.printf("\r\n\r\n__%f___ \r\n\r\n",sum);
     }
-    sum = sum/20.0;
+    sum = sum/40.0;
     return sum;
 }
 double Ads1118::read_vol_average(uint8_t ch)

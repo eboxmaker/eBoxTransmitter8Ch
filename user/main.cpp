@@ -32,7 +32,8 @@ Copyright 2015 shentq. All Rights Reserved.
 u8 count;
 Timer timer4(TIM4);
 Timer timer2(TIM2);
-FilterAverage fmw0(50);
+FilterAverage fmw0(20);
+FilterAverage fmw1(20);
 
 void FreeModbusIoConfig(void)
 { 
@@ -108,7 +109,18 @@ void setup()
     uart3.begin(115200);
     uart1.attach(ddc_input,RxIrq);
     uart1.interrupt(RxIrq,ENABLE);
-    
+    if(adjust_check() == true)
+    {
+                adjust_read(&pt100);
+        uart1.printf("\r\noffset rx:%f\r\n",pt100.offsetRx.value);
+        uart1.printf("ratio rx:%f\r\n",pt100.ratioRx.value);
+        uart1.printf("cc rx:%f\r\n",pt100.ccRx.value);
+        
+        uart1.printf("offset pt:%f\r\n",pt100.offsetPt.value);
+        uart1.printf("ratio pt:%f\r\n",pt100.ratioPt.value);
+        uart1.printf("cc pt:%f\r\n",pt100.ccPt.value);
+
+    }    
     ddc_init();
     ddc_attach_chx(20,enter_adjust);
      timer2.begin(10);
@@ -131,7 +143,7 @@ void setup()
 
 //	PA4.mode(AIN);
 //	PA5.mode(AIN);
-    PA5.mode(OUTPUT_PP);
+//    PA5.mode(OUTPUT_PP);
 	adc.begin(1);
     uart1.printf("test:%d\r\n",adc.self_test());
 
@@ -158,6 +170,9 @@ void setup()
     PB0.reset();
     PB1.reset();
     PB2.reset();
+    
+    PB10.mode(OUTPUT_PP);
+    PB10.reset();
 
 }
 static DataFloat_t adc_value;
@@ -184,47 +199,50 @@ int main(void)
             calibrate();
             is_enter_adjust_flag.value = 0;
         }
-            adc_value.value = adc.read_average(ADC_AIN0);
-            adc_voltage.value = adc.adc_to_voltage(adc_value.value);
-            adc_value1.value = adc.read_average(ADC_AIN1);
-            adc_voltage1.value = adc.adc_to_voltage(adc_value1.value);
-            adc_value2.value = adc.read_average(ADC_AIN2);
-            adc_voltage2.value = adc.adc_to_voltage(adc_value2.value);
+            if(millis() - last_update > 1000)
+            {
 
-            pt100.rxOrigin.value = (adc_voltage1.value - adc_voltage2.value )/101;
-            if(pt100.rxMode == 0)
-                pt100.rx.value = (adc_value1.value -  adc_value2.value - pt100.offsetRx.value)/538.667;
-            else
+                adc_value.value = adc.read_average(ADC_AIN0);
+//            adc_voltage.value = adc.adc_to_voltage(adc_value.value);
+            adc_value1.value = adc.read_average(ADC_AIN1);
+//            adc_voltage1.value = adc.adc_to_voltage(adc_value1.value);
+            adc_value2.value = adc.read_average(ADC_AIN2);
+//            adc_voltage2.value = adc.adc_to_voltage(adc_value2.value);
+
+//            pt100.rxOrigin.value = (adc_voltage1.value - adc_voltage2.value )/101;
+//            if(pt100.rxMode == 0)
+//                pt100.rx.value = (adc_value1.value -  adc_value2.value - pt100.offsetRx.value)/538.667;
+//            else
                 pt100.rx.value = adc_value1.value*pt100.ratioRx.value + pt100.offsetRx.value;
 
             
-            if(pt100.ptMode == 0)
-                pt100.rt.value = (adc_value.value  - pt100.offsetPt.value)/85.333;
-            else
-                pt100.rt.value = adc_value.value * pt100.ratioPt.value + pt100.offsetPt.value - pt100.rx.value;
+//            if(pt100.ptMode == 0)
+//                pt100.rt.value = (adc_value.value  - pt100.offsetPt.value)/85.333;
+//            else
+                pt100.rt.value = adc_value.value * pt100.ratioPt.value + pt100.offsetPt.value;
 
 
-            if(millis() - last_update > 1000)
-            {
+
                 PA5.toggle();
+                pt100.temp.value = RtoT(pt100.rt.value,1);
                 last_update = millis();
                 data[0] = pt100.rt.byte[0];
                 data[1] = pt100.rt.byte[1];
                 data[2] = pt100.rt.byte[2];
                 data[3] = pt100.rt.byte[3];
-                data[4] = pt100.rt.byte[0];
-                data[5] = pt100.rt.byte[1];
-                data[6] = pt100.rt.byte[2];
-                data[7] = pt100.rt.byte[3];
+                data[4] = pt100.temp.byte[0];
+                data[5] = pt100.temp.byte[1];
+                data[6] = pt100.temp.byte[2];
+                data[7] = pt100.temp.byte[3];
                 ddc_nonblocking(data,8,DDC_NoAck,6);  
-                data[0] = pt100.rxOrigin.byte[0];
-                data[1] = pt100.rxOrigin.byte[1];
-                data[2] = pt100.rxOrigin.byte[2];
-                data[3] = pt100.rxOrigin.byte[3];
-                data[4] = pt100.rx.byte[0];
-                data[5] = pt100.rx.byte[1];
-                data[6] = pt100.rx.byte[2];
-                data[7] = pt100.rx.byte[3];
+                data[0] = pt100.rx.byte[0];
+                data[1] = pt100.rx.byte[1];
+                data[2] = pt100.rx.byte[2];
+                data[3] = pt100.rx.byte[3];
+                data[4] = pt100.rxOrigin.byte[0];
+                data[5] = pt100.rxOrigin.byte[1];
+                data[6] = pt100.rxOrigin.byte[2];
+                data[7] = pt100.rxOrigin.byte[3];
                 ddc_nonblocking(data,8,DDC_NoAck,5);
 
             }
@@ -258,9 +276,9 @@ double get_rx()
    while(1)
    {
         uint16_t temp = adc.read(ADC_AIN2);
-        if(fmw0.sample(temp) == true)
+        if(fmw1.sample(temp) == true)
         {
-            temphex2 = fmw0.out();
+            temphex2 = fmw1.out();
             tempv2 = adc.adc_to_voltage(hex2);
             break;
         }

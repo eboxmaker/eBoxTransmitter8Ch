@@ -3,6 +3,7 @@
 #include "ddc.h"
 #include "bsp.h"
 
+double RtoT(double R, uint8_t type);
 
 PtData_t pt100;
 
@@ -281,14 +282,14 @@ void calibrate()
                 pt100.rx.value = (adc_value1.value -  adc_value2.value - pt100.offsetRx.value)/538.667;
             else
                 pt100.rx.value = adc_value1.value*pt100.ratioRx.value + pt100.offsetRx.value;
-            data[0] = pt100.rxOrigin.byte[0];
-            data[1] = pt100.rxOrigin.byte[1];
-            data[2] = pt100.rxOrigin.byte[2];
-            data[3] = pt100.rxOrigin.byte[3];
-            data[4] = pt100.rx.byte[0];
-            data[5] = pt100.rx.byte[1];
-            data[6] = pt100.rx.byte[2];
-            data[7] = pt100.rx.byte[3];
+                data[0] = pt100.rx.byte[0];
+                data[1] = pt100.rx.byte[1];
+                data[2] = pt100.rx.byte[2];
+                data[3] = pt100.rx.byte[3];
+                data[4] = pt100.rxOrigin.byte[0];
+                data[5] = pt100.rxOrigin.byte[1];
+                data[6] = pt100.rxOrigin.byte[2];
+                data[7] = pt100.rxOrigin.byte[3];
             ddc_nonblocking(data,8,DDC_NoAck,5);
 
 
@@ -297,14 +298,17 @@ void calibrate()
                 pt100.rt.value = (adc_value.value  - pt100.offsetPt.value)/85.333;
             else
                 pt100.rt.value = adc_value.value * pt100.ratioPt.value + pt100.offsetPt.value - pt100.rx.value;
+            
+            pt100.temp.value = RtoT(pt100.rt.value,1);
+
             data[0] = pt100.rt.byte[0];
             data[1] = pt100.rt.byte[1];
             data[2] = pt100.rt.byte[2];
             data[3] = pt100.rt.byte[3];
-            data[4] = pt100.rt.byte[0];
-            data[5] = pt100.rt.byte[1];
-            data[6] = pt100.rt.byte[2];
-            data[7] = pt100.rt.byte[3];
+            data[4] = pt100.temp.byte[0];
+            data[5] = pt100.temp.byte[1];
+            data[6] = pt100.temp.byte[2];
+            data[7] = pt100.temp.byte[3];
             ddc_nonblocking(data,8,DDC_NoAck,6);
 
 
