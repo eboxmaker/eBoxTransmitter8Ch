@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "bsp.h"
 
+DataU32_t is_enter_adjust_flag;
 /*
 Led     led1(&PB8,1);
 Led     led2(&PB9,1);
@@ -32,5 +33,7 @@ At24c02 eeprom(&i2c2);
 */
 Ads1118 adc(&PB12,&spi2);
 Flash iflash;
+Iwdg wdg;
+Timer timer2(TIM2);
 
 

@@ -74,7 +74,7 @@ uint16_t Ads1118::read(uint8_t ch)
     last = millis();
     while(miso->read() == 1)
     {   
-        if(millis() - last > 10)
+        if(millis() - last > 5)
             break;
     }
     value |= spi->transfer(0xff) << 8;
@@ -122,13 +122,13 @@ float Ads1118::read_average(uint8_t ch)
 {
     double sum = 0;
     read(ch);//空读一次，跳过第一次的不准确
-    for(int i = 0; i < 10; i++)
+    for(int i = 0; i < 9; i++)
     {
         sum += read(ch);
 //        delay_ms(10);
         //uart3.printf("\r\n\r\n__%f___ \r\n\r\n",sum);
     }
-    sum = sum/10.0;
+    sum = sum/9.0;
     return sum;
 }
 double Ads1118::read_vol_average(uint8_t ch)

@@ -17,7 +17,7 @@ void FreeModbusIoConfig(void)
     modbus.uart=&uart2;
 	modbus.timer=&timer4;
 	modbus.Mode4851=&PA4;
-	modbus.Mode4852=&PA5;
+	modbus.Mode4852=&PA4;
 	
 	modbus.Mode=MB_RTU;
 	modbus.SlaveAdress=0x01;
@@ -50,11 +50,11 @@ void Adc_Poll(void)
     usRegInputBuf[0]=pt100.temp.value;
 	
 }
-void hold()
+void hold_update_ch(uint8_t ch)
 {
-    usRegHoldingBuf[0] = pt100.rx.value*100;
-    usRegHoldingBuf[1] = pt100.rt.value*100;
-    usRegHoldingBuf[2] = pt100.temp.value*100;
+    usRegHoldingBuf[ch] = pt100.temp.value*10;
+    usRegHoldingBuf[ch + 10] = pt100.rt.value*100;
+    usRegHoldingBuf[ch + 20] = pt100.rx.value*100;
 }
 
 
@@ -66,8 +66,12 @@ void modbus_init()
 void modbus_loop()
 {
     FreemodbusPoll();
-    LED_Poll();
+//    LED_Poll();
     Button_Poll();
-    Adc_Poll();
-    hold();
+//    Adc_Poll();
+    if(usRegHoldingBuf[30] == 1)
+    {
+        is_enter_adjust_flag.value = 0x55aa;
+        usRegHoldingBuf[30] = 0;
+    }
 }

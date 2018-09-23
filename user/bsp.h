@@ -23,11 +23,17 @@
 #include "ads1118.h"
 #include "pt100.h"
 
+extern DataU32_t is_enter_adjust_flag;
 
 
 
 extern Ads1118 adc;
 extern Flash iflash;
+extern Iwdg wdg;
+extern Timer timer2;
+void select_channel(uint8_t ch);
+void ddc_input();
+void enter_adjust(uint8_t *ptr, uint16_t len);
 
 //class Father
 //{

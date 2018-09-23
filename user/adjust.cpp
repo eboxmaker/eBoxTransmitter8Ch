@@ -2,7 +2,7 @@
 #include "adjust.h"
 #include "ddc.h"
 #include "bsp.h"
-
+#include "mbuser.h"
 
 uint8_t adjust_flag_rx,adjust_flag_pt;
 
@@ -196,10 +196,17 @@ void calibrate()
     uint8_t len;
     uint32_t ajust_timer;
     
+    uart2.attach(ddc_input,RxIrq);
+    uart2.interrupt(RxIrq,ENABLE);
+    ddc_init();
+    ddc_attach_chx(20,enter_adjust);
+    timer2.begin(10);
+    timer2.attach(ddc_loop);
+    timer2.interrupt(ENABLE);
+    timer2.start();
 
-    PB8.mode(OUTPUT_PP);
-    PB9.mode(OUTPUT_PP);
-    PB8.set();
+
+
     ddc_attach_chx(1,calibrate_para);
     ddc_attach_chx(2,calibrate_rx);
     adjust_flag_rx = 0;
@@ -225,11 +232,12 @@ void calibrate()
     }
     while(1)
     {
-        
+       
         if(is_enter_adjust_flag.value == 0x55aa)
         {
             is_enter_adjust_flag.value = 0;
-            return ;
+            modbus_init();
+           return ;
         }
 
 
@@ -336,7 +344,8 @@ void calibrate()
             
             }
         }
-    }
+         wdg.feed();
+   }
 }
 
 bool adjust_check()
