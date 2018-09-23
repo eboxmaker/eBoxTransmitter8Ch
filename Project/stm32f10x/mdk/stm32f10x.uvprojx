@@ -901,6 +901,16 @@
               <FileType>8</FileType>
               <FilePath>..\..\..\user\adjust.cpp</FilePath>
             </File>
+            <File>
+              <FileName>pt100.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\pt100.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>mbuser.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\mbuser.cpp</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

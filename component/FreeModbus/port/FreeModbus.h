@@ -32,7 +32,7 @@ extern uint16_t usRegInputBuf[REG_INPUT_NREGS];
 extern uint16_t usRegInputStart ;
 
 //保持寄存器内容
-extern uint16_t usRegHoldingBuf[REG_HOLDING_NREGS];
+extern int16_t usRegHoldingBuf[REG_HOLDING_NREGS];
 //保持寄存器起始地址
 extern uint16_t usRegHoldingStart ;
 //线圈状态															

@@ -66,7 +66,7 @@ uint16_t Ads1118::read(uint8_t ch)
     {
         cfg.bit.mux = ch;
         update_cfg(&cfg);
-        delay_ms(40);
+        delay_ms(10);
     }
     //读取相应通道值
     spi->take_spi_right(&config);
@@ -74,28 +74,15 @@ uint16_t Ads1118::read(uint8_t ch)
     last = millis();
     while(miso->read() == 1)
     {   
-        if(millis() - last > 20)
+        if(millis() - last > 10)
             break;
     }
     value |= spi->transfer(0xff) << 8;
     value |= spi->transfer(0xff);
     cs->set();
-    spi->release_spi_right();
+    spi->release_spi_right();  
     
-     value = 0;
-    //读取相应通道值
-    spi->take_spi_right(&config);
-    cs->reset();
-    last = millis();
-    while(miso->read() == 1)
-    {   
-        if(millis() - last > 20)
-            break;
-    }
-    value |= spi->transfer(0xff) << 8;
-    value |= spi->transfer(0xff);
-    cs->set();
-    spi->release_spi_right();    return (value);
+    return (value);
 }
 AdsConfig_t Ads1118::update_cfg(AdsConfig_t *cfg)
 {
@@ -107,7 +94,7 @@ AdsConfig_t Ads1118::update_cfg(AdsConfig_t *cfg)
 
     while(miso->read() == 1)
     {   
-        if(millis() - last > 20)
+        if(millis() - last > 10)
             break;
     }
     spi->write(cfg->byte[0]);
@@ -134,13 +121,14 @@ double Ads1118::read_voltage(uint8_t ch)
 float Ads1118::read_average(uint8_t ch)
 {
     double sum = 0;
-    for(int i = 0; i < 40; i++)
+    read(ch);//空读一次，跳过第一次的不准确
+    for(int i = 0; i < 10; i++)
     {
         sum += read(ch);
 //        delay_ms(10);
         //uart3.printf("\r\n\r\n__%f___ \r\n\r\n",sum);
     }
-    sum = sum/40.0;
+    sum = sum/10.0;
     return sum;
 }
 double Ads1118::read_vol_average(uint8_t ch)

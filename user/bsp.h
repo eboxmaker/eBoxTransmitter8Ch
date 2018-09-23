@@ -21,7 +21,7 @@
 #define __BSP_H
 #include "ebox.h"
 #include "ads1118.h"
-
+#include "pt100.h"
 
 
 

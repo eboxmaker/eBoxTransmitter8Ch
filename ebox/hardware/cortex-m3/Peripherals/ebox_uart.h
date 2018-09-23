@@ -119,6 +119,8 @@ private:
     uint16_t            dma_write(const char *str, uint16_t length);
     void                set_busy();
     Dma                 *dma_tx;
+    Gpio    *tx_pin;
+    Gpio    *rx_pin;
 
 protected:
     FunctionPointer _irq[2];

@@ -3,9 +3,6 @@
 #include "ddc.h"
 #include "bsp.h"
 
-double RtoT(double R, uint8_t type);
-
-PtData_t pt100;
 
 uint8_t adjust_flag_rx,adjust_flag_pt;
 
@@ -72,19 +69,20 @@ void calibrate_para(uint8_t *ptr, uint16_t len )
 
     if(rows == 1)
     {
-        ebox_memcpy(adc.byte,ptr,8);
-        ptr+=8;
-        ebox_memcpy(value.byte,ptr,8);
-        ptr+=8;
-        if(value.value == 0)
-        {
-            pt100.offsetPt.value = 538.667;
-            pt100.offsetPt.value = adc_value.value ;//差值
-            pt100.ccPt.value = 100;
-            ddc_nonblocking(pt100.ccPt.byte,8,DDC_NoAck,10);
+//        ebox_memcpy(adc.byte,ptr,8);
+//        ptr+=8;
+//        ebox_memcpy(value.byte,ptr,8);
+//        ptr+=8;
+//        if(value.value == 0)
+//        {
+//            pt100.offsetPt.value = 538.667;
+//            pt100.offsetPt.value = adc_value.value ;//差值
+//            pt100.ccPt.value = 100;
+//            ddc_nonblocking(pt100.ccPt.byte,8,DDC_NoAck,10);
 
-            pt100.ptMode = 0;
-        }
+//            pt100.ptMode = 0;
+//        }
+        return ;
     }
     else
     {
@@ -124,7 +122,7 @@ void calibrate_para(uint8_t *ptr, uint16_t len )
 
 }
 
-void adjust_rx(uint8_t *ptr, uint16_t len )
+void calibrate_rx(uint8_t *ptr, uint16_t len )
 {
     uint8_t data[16];
     DataDouble_t adc;
@@ -135,19 +133,20 @@ void adjust_rx(uint8_t *ptr, uint16_t len )
     DataFloat_t value_cc;
     if(rows == 1)
     {
-        ebox_memcpy(adc.byte,ptr,8);
-        ptr+=8;
-        ebox_memcpy(value.byte,ptr,8);
+//        ebox_memcpy(adc.byte,ptr,8);
+//        ptr+=8;
+//        ebox_memcpy(value.byte,ptr,8);
 
-        if(value.value == 0)
-        {
-            pt100.ratioRx.value = 538.667;
-            pt100.offsetRx.value = adc_value1.value - adc_value2.value;//差值
-            pt100.ccRx.value = 100;
-            ddc_nonblocking(pt100.ccRx.byte,8,DDC_NoAck,10);
+//        if(value.value == 0)
+//        {
+//            pt100.ratioRx.value = 538.667;
+//            pt100.offsetRx.value = adc_value1.value - adc_value2.value;//差值
+//            pt100.ccRx.value = 100;
+//            ddc_nonblocking(pt100.ccRx.byte,8,DDC_NoAck,10);
 
-        }
-        pt100.rxMode = 0;
+//        }
+//        pt100.rxMode = 0;
+        return ;
     }
     else
     {
@@ -186,6 +185,8 @@ void adjust_rx(uint8_t *ptr, uint16_t len )
     PB9.toggle();
 
 }
+extern DataU32_t is_enter_adjust_flag;
+
 void calibrate()
 {
     uint8_t *p;
@@ -200,29 +201,52 @@ void calibrate()
     PB9.mode(OUTPUT_PP);
     PB8.set();
     ddc_attach_chx(1,calibrate_para);
-    ddc_attach_chx(2,adjust_rx);
+    ddc_attach_chx(2,calibrate_rx);
     adjust_flag_rx = 0;
     adjust_flag_pt = 0;
     if(adjust_check() == true)
     {
-        uart1.printf("\r\n***********para saved!****************\r\n****************\r\n****************\r\n****************\r\n****************\r\n****************\r\n");
+
         adjust_read(&pt100);
+        uart1.printf("\r\noffset rx:%f\r\n",pt100.offsetRx.value);
+        uart1.printf("ratio rx:%f\r\n",pt100.ratioRx.value);
+        uart1.printf("cc rx:%f\r\n",pt100.ccRx.value);
+        
+        uart1.printf("offset pt:%f\r\n",pt100.offsetPt.value);
+        uart1.printf("ratio pt:%f\r\n",pt100.ratioPt.value);
+        uart1.printf("cc pt:%f\r\n",pt100.ccPt.value);
+
+        uart1.printf("\r\n***********calibration paraments is exsit!****************\r\n");
+    }
+    else
+    {
+        uart1.printf("\r\n***********please calibrate !****************\r\n");
+
     }
     while(1)
     {
+        
+        if(is_enter_adjust_flag.value == 0x55aa)
+        {
+            is_enter_adjust_flag.value = 0;
+            return ;
+        }
+
+
         if(millis() - ajust_timer > 1000)
         {
-            PA5.toggle();
-            if(adjust_check() == true)
-            {
-                uart1.printf("\r\noffset rx:%f\r\n",pt100.offsetRx.value);
-                uart1.printf("ratio rx:%f\r\n",pt100.ratioRx.value);
-                uart1.printf("cc rx:%f\r\n",pt100.ccRx.value);
-                
-                uart1.printf("offset pt:%f\r\n",pt100.offsetPt.value);
-                uart1.printf("ratio pt:%f\r\n",pt100.ratioPt.value);
-                uart1.printf("cc pt:%f\r\n",pt100.ccPt.value);
-            }
+        uart1.printf("\r\nfree:%d\r\n",ebox_get_free());
+//            PA5.toggle();
+//            if(adjust_check() == true)
+//            {
+//                uart1.printf("\r\noffset rx:%f\r\n",pt100.offsetRx.value);
+//                uart1.printf("ratio rx:%f\r\n",pt100.ratioRx.value);
+//                uart1.printf("cc rx:%f\r\n",pt100.ccRx.value);
+//                
+//                uart1.printf("offset pt:%f\r\n",pt100.offsetPt.value);
+//                uart1.printf("ratio pt:%f\r\n",pt100.ratioPt.value);
+//                uart1.printf("cc pt:%f\r\n",pt100.ccPt.value);
+//            }
             ajust_timer = millis();
             adc_value.value = adc.read_average(ADC_AIN0);
             adc_voltage.value = adc.adc_to_voltage(adc_value.value);
@@ -249,55 +273,47 @@ void calibrate()
             ddc_nonblocking(data,8,DDC_NoAck,2);
 
 
-            adc_value2.value = adc.read_average(ADC_AIN2);
-            adc_voltage2.value = adc.adc_to_voltage(adc_value2.value);
-            data[0] = adc_value2.byte[0];
-            data[1] = adc_value2.byte[1];
-            data[2] = adc_value2.byte[2];
-            data[3] = adc_value2.byte[3];
-            data[4] = adc_voltage2.byte[0];
-            data[5] = adc_voltage2.byte[1];
-            data[6] = adc_voltage2.byte[2];
-            data[7] = adc_voltage2.byte[3];
-            ddc_nonblocking(data,8,DDC_NoAck,3);
+//AIN2通道
+//            adc_value2.value = adc.read_average(ADC_AIN2);
+//            adc_voltage2.value = adc.adc_to_voltage(adc_value2.value);
+//            data[0] = adc_value2.byte[0];
+//            data[1] = adc_value2.byte[1];
+//            data[2] = adc_value2.byte[2];
+//            data[3] = adc_value2.byte[3];
+//            data[4] = adc_voltage2.byte[0];
+//            data[5] = adc_voltage2.byte[1];
+//            data[6] = adc_voltage2.byte[2];
+//            data[7] = adc_voltage2.byte[3];
+//            ddc_nonblocking(data,8,DDC_NoAck,3);
  
 
 
-            adc_value3.value = adc.read_average(ADC_AIN3);
-            adc_voltage3.value = adc.adc_to_voltage(adc_value3.value);
-            data[0] = adc_value3.byte[0];
-            data[1] = adc_value3.byte[1];
-            data[2] = adc_value3.byte[2];
-            data[3] = adc_value3.byte[3];
-            data[4] = adc_voltage3.byte[0];
-            data[5] = adc_voltage3.byte[1];
-            data[6] = adc_voltage3.byte[2];
-            data[7] = adc_voltage3.byte[3];
-            ddc_nonblocking(data,8,DDC_NoAck,4);
+//AIN3通道
+//            adc_value3.value = adc.read_average(ADC_AIN3);
+//            adc_voltage3.value = adc.adc_to_voltage(adc_value3.value);
+//            data[0] = adc_value3.byte[0];
+//            data[1] = adc_value3.byte[1];
+//            data[2] = adc_value3.byte[2];
+//            data[3] = adc_value3.byte[3];
+//            data[4] = adc_voltage3.byte[0];
+//            data[5] = adc_voltage3.byte[1];
+//            data[6] = adc_voltage3.byte[2];
+//            data[7] = adc_voltage3.byte[3];
+//            ddc_nonblocking(data,8,DDC_NoAck,4);
+
+
+//线电阻数据
+            pt100.rx.value = adc_value1.value*pt100.ratioRx.value + pt100.offsetRx.value;
+            data[0] = pt100.rx.byte[0];
+            data[1] = pt100.rx.byte[1];
+            data[2] = pt100.rx.byte[2];
+            data[3] = pt100.rx.byte[3];
+            ddc_nonblocking(data,4,DDC_NoAck,5);
 
 
 
-            pt100.rxOrigin.value = (adc_voltage1.value - adc_voltage2.value )/101;
-            if(pt100.rxMode == 0)
-                pt100.rx.value = (adc_value1.value -  adc_value2.value - pt100.offsetRx.value)/538.667;
-            else
-                pt100.rx.value = adc_value1.value*pt100.ratioRx.value + pt100.offsetRx.value;
-                data[0] = pt100.rx.byte[0];
-                data[1] = pt100.rx.byte[1];
-                data[2] = pt100.rx.byte[2];
-                data[3] = pt100.rx.byte[3];
-                data[4] = pt100.rxOrigin.byte[0];
-                data[5] = pt100.rxOrigin.byte[1];
-                data[6] = pt100.rxOrigin.byte[2];
-                data[7] = pt100.rxOrigin.byte[3];
-            ddc_nonblocking(data,8,DDC_NoAck,5);
-
-
-
-            if(pt100.ptMode == 0)
-                pt100.rt.value = (adc_value.value  - pt100.offsetPt.value)/85.333;
-            else
-                pt100.rt.value = adc_value.value * pt100.ratioPt.value + pt100.offsetPt.value - pt100.rx.value;
+//温度和电阻数据
+            pt100.rt.value = adc_value.value * pt100.ratioPt.value + pt100.offsetPt.value - 2 * pt100.rx.value;
             
             pt100.temp.value = RtoT(pt100.rt.value,1);
 
