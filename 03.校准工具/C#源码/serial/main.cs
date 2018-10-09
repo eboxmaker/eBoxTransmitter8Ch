@@ -120,7 +120,6 @@ namespace serial
                             switch(ddc.rFrame.ch)
                             {
                                 case 1:
-                                    tbRDDCptadc.Text = BitConverter.ToSingle(ddc.rFrame.pay, 0).ToString("F4");
                                     tbDDCadc0.Text = BitConverter.ToSingle(ddc.rFrame.pay, 0).ToString("F4");
                                     tbDDCvoltage0.Text = BitConverter.ToSingle(ddc.rFrame.pay, 4).ToString("F4");
                                     break;
@@ -130,6 +129,7 @@ namespace serial
                                     tbDDCvoltage1.Text = BitConverter.ToSingle(ddc.rFrame.pay, 4).ToString("F4");
                                     break;
                                 case 3:
+                                    tbRDDCptadc.Text = BitConverter.ToSingle(ddc.rFrame.pay, 0).ToString("F4");
                                     tbDDCadc2.Text = BitConverter.ToSingle(ddc.rFrame.pay, 0).ToString("F4");
                                     tbDDCvoltage2.Text = BitConverter.ToSingle(ddc.rFrame.pay, 4).ToString("F4");
                                     break;

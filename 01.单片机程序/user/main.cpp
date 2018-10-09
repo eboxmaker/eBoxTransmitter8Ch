@@ -49,6 +49,8 @@ void setup()
     //LED初始化
     PA5.mode(OUTPUT_PP);
     
+    PA4.mode(OUTPUT_PP);
+    
     //通道选择初始化
     PB0.mode(OUTPUT_PP);
     PB1.mode(OUTPUT_PP);
@@ -59,6 +61,8 @@ void setup()
     //继电器
     PB10.mode(OUTPUT_PP);
     PB10.reset();//默认设置，使用PT100
+    PA7.mode(OUTPUT_PP);
+    PA7.reset();//默认设置，使用PT100
     
     //modbus初始化
     modbus_init();
@@ -126,7 +130,7 @@ int main(void)
         set_channel(ch);
         rc_delay = millis();
         PA5.set();
-        while(millis() - rc_delay < 150)
+        while(millis() - rc_delay < 50)
         {
             modbus_loop();
         }
@@ -135,10 +139,11 @@ int main(void)
         //得去ADC
         adc_value.value = adc.read_average(ADC_AIN0);
         adc_value1.value = adc.read_average(ADC_AIN1);
+        adc_value2.value = adc.read_average(ADC_AIN2);
 
         //计算电阻
         pt100.rx.value = adc_value1.value*pt100.ratioRx.value + pt100.offsetRx.value;
-        pt100.rt.value = adc_value.value * pt100.ratioPt.value + pt100.offsetPt.value - 2*pt100.rx.value;
+        pt100.rt.value = adc_value2.value * pt100.ratioPt.value + pt100.offsetPt.value - 2*pt100.rx.value;
 
         //计算温度
         pt100.temp.value = RtoT(pt100.rt.value,pt100.ptType);
@@ -166,9 +171,9 @@ void set_ratio(ResType_t type)
 {
     switch((uint8_t)type)
     {
-        case (uint8_t)PT10: PB10.write(0);break;
-        case (uint8_t)PT100: PB10.write(0);break;
-        case (uint8_t)PT1000: PB10.write(1);break;
+        case (uint8_t)PT10: {PB10.write(0);PA7.write(0);}break;
+        case (uint8_t)PT100: {PB10.write(0);PA7.write(0);}break;
+        case (uint8_t)PT1000: {PB10.write(1);delay_ms(1000);PA7.write(1);}break;
     }   
 }
 

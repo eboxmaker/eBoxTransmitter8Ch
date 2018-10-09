@@ -75,7 +75,7 @@ uint16_t Ads1118::read(uint8_t ch)
     last = millis();
     while(miso->read() == 1)
     {   
-            modbus_loop();
+           // modbus_loop();
         if(millis() - last > 5)
             break;
     }
@@ -128,7 +128,6 @@ float Ads1118::read_average(uint8_t ch)
     {
         sum += read(ch);
 //        delay_ms(10);
-        //uart3.printf("\r\n\r\n__%f___ \r\n\r\n",sum);
     }
     sum = sum/9.0;
     return sum;

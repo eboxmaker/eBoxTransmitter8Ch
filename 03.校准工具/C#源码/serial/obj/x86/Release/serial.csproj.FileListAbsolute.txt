@@ -46,3 +46,16 @@ C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\serial\obj\x
 C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\serial\obj\x86\Release\serial.csproj.GenerateResource.Cache
 C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\serial\obj\x86\Release\serial.exe.manifest
 C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\serial\obj\x86\Release\serial.application
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\obj\x86\Release\serial.exe
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\obj\x86\Release\serial.pdb
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\bin\Release\serial.exe.manifest
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\bin\Release\serial.application
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\bin\Release\serial.exe
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\bin\Release\serial.pdb
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\obj\x86\Release\serial.csprojResolveAssemblyReference.cache
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\obj\x86\Release\serial.main.resources
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\obj\x86\Release\serial.Properties.Resources.resources
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\obj\x86\Release\serial.csproj.GenerateResource.Cache
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\obj\x86\Release\serial.exe.manifest
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\obj\x86\Release\serial.application
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\obj\x86\Release\serial.TrustInfo.xml

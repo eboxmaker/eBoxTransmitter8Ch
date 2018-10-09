@@ -120,6 +120,9 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGUARM</Key>
+          <Name>?YwX辪
+?YwX辪
+</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -156,18 +159,34 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>108</LineNumber>
+          <LineNumber>250</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134252364</Address>
+          <Address>134238396</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>..\..\..\user\main.cpp</Filename>
+          <Filename>C:\Users\Administrator\Documents\eBoxTransmitter8Ch\user\adjust.cpp</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\ebox\../../../user/main.cpp\108</Expression>
+          <Expression>\\ebox\../../../user/adjust.cpp\250</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>216</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134236938</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>C:\Users\Administrator\Documents\eBoxTransmitter8Ch\user\adjust.cpp</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\ebox\../../../user/adjust.cpp\216</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -221,6 +240,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>is_enter_adjust_flag</ItemText>
         </Ww>
+        <Ww>
+          <count>10</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>data,0x0A</ItemText>
+        </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
@@ -272,12 +296,6 @@
       <pszMrulep></pszMrulep>
       <pSingCmdsp></pSingCmdsp>
       <pMultCmdsp></pMultCmdsp>
-      <SystemViewers>
-        <Entry>
-          <Name>System Viewer\USART2</Name>
-          <WinId>35905</WinId>
-        </Entry>
-      </SystemViewers>
       <DebugDescription>
         <Enable>1</Enable>
         <EnableLog>0</EnableLog>
@@ -625,7 +643,7 @@
 
   <Group>
     <GroupName>eboxFun</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -1153,7 +1171,7 @@
 
   <Group>
     <GroupName>edriver</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>

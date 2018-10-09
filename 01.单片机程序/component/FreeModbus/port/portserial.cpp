@@ -49,24 +49,24 @@ vMBPortSerialEnable( BOOL xRxEnable, BOOL xTxEnable )
         //使能接收和接收中断
         //MAX485操作 低电平为接收模式
         RxEnaleBit=1;
-        modbus.Mode4851->write(1);
-        modbus.Mode4852->write(1);
+        modbus.Mode4851->write(0);
+        modbus.Mode4852->write(0);
         modbus.uart->interrupt(RxIrq,ENABLE);
     }
     else
     {
         //MAX485操作 高电平为发送模式
         RxEnaleBit=0;
-        modbus.Mode4851->write(0);
-        modbus.Mode4852->write(0);
+        modbus.Mode4851->write(1);
+        modbus.Mode4852->write(1);
         modbus.uart->interrupt(RxIrq,DISABLE);
     }
 
     if(xTxEnable)
     {
         //使能发送完成中断
-        modbus.Mode4851->write(0);
-        modbus.Mode4852->write(0);
+        modbus.Mode4851->write(1);
+        modbus.Mode4852->write(1);
         TxEnaleBit=1;
         modbus.uart->interrupt(TcIrq,ENABLE);
     }
@@ -74,8 +74,8 @@ vMBPortSerialEnable( BOOL xRxEnable, BOOL xTxEnable )
     {
         //禁止发送完成中断
         TxEnaleBit=0;
-        modbus.Mode4851->write(1);
-        modbus.Mode4852->write(1);
+        modbus.Mode4851->write(0);
+        modbus.Mode4852->write(0);
         modbus.uart->interrupt(TcIrq,DISABLE);
     }
   

@@ -202,7 +202,13 @@ void calibrate()
 {
     uint8_t *p;
     uint8_t *px;
-    uint8_t data[20];
+    uint8_t data1[20];
+    uint8_t data2[20];
+    uint8_t data3[20];
+    uint8_t data4[20];
+    uint8_t data5[20];
+    uint8_t data6[20];
+    uint8_t data7[20];
 
     uint8_t len;
     uint32_t ajust_timer;
@@ -254,8 +260,8 @@ void calibrate()
 
         if(millis() - ajust_timer > 1000)
         {
-        uart1.printf("\r\nfree:%d\r\n",ebox_get_free());
-//            PA5.toggle();
+//        uart1.printf("\r\nfree:%d\r\n",ebox_get_free());
+            PA5.toggle();
 //            if(adjust_check() == true)
 //            {
 //                uart1.printf("\r\noffset rx:%f\r\n",pt100.offsetRx.value);
@@ -269,82 +275,86 @@ void calibrate()
             ajust_timer = millis();
             adc_value.value = adc.read_average(ADC_AIN0);
             adc_voltage.value = adc.adc_to_voltage(adc_value.value);
-            data[0] = adc_value.byte[0];
-            data[1] = adc_value.byte[1];
-            data[2] = adc_value.byte[2];
-            data[3] = adc_value.byte[3];
-            data[4] = adc_voltage.byte[0];
-            data[5] = adc_voltage.byte[1];
-            data[6] = adc_voltage.byte[2];
-            data[7] = adc_voltage.byte[3];
-            ddc_nonblocking(data,8,DDC_NoAck,1);
+            data1[0] = adc_value.byte[0];
+            data1[1] = adc_value.byte[1];
+            data1[2] = adc_value.byte[2];
+            data1[3] = adc_value.byte[3];
+            data1[4] = adc_voltage.byte[0];
+            data1[5] = adc_voltage.byte[1];
+            data1[6] = adc_voltage.byte[2];
+            data1[7] = adc_voltage.byte[3];
 
             adc_value1.value = adc.read_average(ADC_AIN1);
             adc_voltage1.value = adc.adc_to_voltage(adc_value1.value);
-            data[0] = adc_value1.byte[0];
-            data[1] = adc_value1.byte[1];
-            data[2] = adc_value1.byte[2];
-            data[3] = adc_value1.byte[3];
-            data[4] = adc_voltage1.byte[0];
-            data[5] = adc_voltage1.byte[1];
-            data[6] = adc_voltage1.byte[2];
-            data[7] = adc_voltage1.byte[3];
-            ddc_nonblocking(data,8,DDC_NoAck,2);
+            data2[0] = adc_value1.byte[0];
+            data2[1] = adc_value1.byte[1];
+            data2[2] = adc_value1.byte[2];
+            data2[3] = adc_value1.byte[3];
+            data2[4] = adc_voltage1.byte[0];
+            data2[5] = adc_voltage1.byte[1];
+            data2[6] = adc_voltage1.byte[2];
+            data2[7] = adc_voltage1.byte[3];
 
 
 //AIN2通道
-//            adc_value2.value = adc.read_average(ADC_AIN2);
-//            adc_voltage2.value = adc.adc_to_voltage(adc_value2.value);
-//            data[0] = adc_value2.byte[0];
-//            data[1] = adc_value2.byte[1];
-//            data[2] = adc_value2.byte[2];
-//            data[3] = adc_value2.byte[3];
-//            data[4] = adc_voltage2.byte[0];
-//            data[5] = adc_voltage2.byte[1];
-//            data[6] = adc_voltage2.byte[2];
-//            data[7] = adc_voltage2.byte[3];
-//            ddc_nonblocking(data,8,DDC_NoAck,3);
+            adc_value2.value = adc.read_average(ADC_AIN2);
+            adc_voltage2.value = adc.adc_to_voltage(adc_value2.value);
+            data3[0] = adc_value2.byte[0];
+            data3[1] = adc_value2.byte[1];
+            data3[2] = adc_value2.byte[2];
+            data3[3] = adc_value2.byte[3];
+            data3[4] = adc_voltage2.byte[0];
+            data3[5] = adc_voltage2.byte[1];
+            data3[6] = adc_voltage2.byte[2];
+            data3[7] = adc_voltage2.byte[3];
  
 
 
 //AIN3通道
-//            adc_value3.value = adc.read_average(ADC_AIN3);
-//            adc_voltage3.value = adc.adc_to_voltage(adc_value3.value);
-//            data[0] = adc_value3.byte[0];
-//            data[1] = adc_value3.byte[1];
-//            data[2] = adc_value3.byte[2];
-//            data[3] = adc_value3.byte[3];
-//            data[4] = adc_voltage3.byte[0];
-//            data[5] = adc_voltage3.byte[1];
-//            data[6] = adc_voltage3.byte[2];
-//            data[7] = adc_voltage3.byte[3];
-//            ddc_nonblocking(data,8,DDC_NoAck,4);
+            adc_value3.value = adc.read_average(ADC_AIN3);
+            adc_voltage3.value = adc.adc_to_voltage(adc_value3.value);
+            data4[0] = adc_value3.byte[0];
+            data4[1] = adc_value3.byte[1];
+            data4[2] = adc_value3.byte[2];
+            data4[3] = adc_value3.byte[3];
+            data4[4] = adc_voltage3.byte[0];
+            data4[5] = adc_voltage3.byte[1];
+            data4[6] = adc_voltage3.byte[2];
+            data4[7] = adc_voltage3.byte[3];
 
 
 //线电阻数据
             pt100.rx.value = adc_value1.value*pt100.ratioRx.value + pt100.offsetRx.value;
-            data[0] = pt100.rx.byte[0];
-            data[1] = pt100.rx.byte[1];
-            data[2] = pt100.rx.byte[2];
-            data[3] = pt100.rx.byte[3];
-            ddc_nonblocking(data,4,DDC_NoAck,5);
+            data5[0] = pt100.rx.byte[0];
+            data5[1] = pt100.rx.byte[1];
+            data5[2] = pt100.rx.byte[2];
+            data5[3] = pt100.rx.byte[3];
 
 
 
 //温度和电阻数据
-            pt100.rt.value = adc_value.value * pt100.ratioPt.value + pt100.offsetPt.value - 2 * pt100.rx.value;
+            pt100.rt.value = adc_value2.value * pt100.ratioPt.value + pt100.offsetPt.value - 2 * pt100.rx.value;
             
-            pt100.temp.value = RtoT(pt100.rt.value,1);
+            pt100.temp.value = RtoT(pt100.rt.value,pt100.ptType);
 
-            data[0] = pt100.rt.byte[0];
-            data[1] = pt100.rt.byte[1];
-            data[2] = pt100.rt.byte[2];
-            data[3] = pt100.rt.byte[3];
-            data[4] = pt100.temp.byte[0];
-            data[5] = pt100.temp.byte[1];
-            data[6] = pt100.temp.byte[2];
-            data[7] = pt100.temp.byte[3];
-            ddc_nonblocking(data,8,DDC_NoAck,6);
+            data6[0] = pt100.rt.byte[0];
+            data6[1] = pt100.rt.byte[1];
+            data6[2] = pt100.rt.byte[2];
+            data6[3] = pt100.rt.byte[3];
+            data6[4] = pt100.temp.byte[0];
+            data6[5] = pt100.temp.byte[1];
+            data6[6] = pt100.temp.byte[2];
+            data6[7] = pt100.temp.byte[3];
+            
+            delay_ms(10);
+            
+            ddc_nonblocking(data1,8,DDC_NoAck,1);
+            ddc_nonblocking(data2,8,DDC_NoAck,2);
+            ddc_nonblocking(data3,8,DDC_NoAck,3);
+            ddc_nonblocking(data4,8,DDC_NoAck,4);
+            ddc_nonblocking(data5,4,DDC_NoAck,5);
+            ddc_nonblocking(data6,8,DDC_NoAck,6);
+            delay_ms(10);
 
 
             if(adjust_flag_rx == 1 && adjust_flag_pt == 1)
