@@ -82,6 +82,11 @@ namespace serial
             dgw1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgw2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
+            cbPTMode.Items.Add("PT100");
+            cbPTMode.Items.Add("PT1000");
+            cbPTMode.SelectedIndex = 0;
+            cbPTMode.Enabled = false;
+
         }
         void sp1_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
@@ -239,6 +244,7 @@ namespace serial
                     //btnSendAdjustRx.Enabled = true;
                     //btnExitCal.Enabled = true;
                     btnEnterCal.Enabled = true;
+                    cbPTMode.Enabled = true;
 
                 }
                 catch (System.Exception ex)
@@ -256,6 +262,7 @@ namespace serial
                 btnSendAdjustRx.Enabled = false;
                 btnExitCal.Enabled = false;
                 btnEnterCal.Enabled = false;
+                cbPTMode.Enabled = false;
                 sp1.Close();
                 btnSwitch.Text = "打开串口";
 
@@ -609,12 +616,53 @@ namespace serial
         {
 
         }
-
+        public static void Delay(int milliSecond)
+        {
+            int start = Environment.TickCount;
+            while (Math.Abs(Environment.TickCount - start) < milliSecond)
+            {
+                Application.DoEvents();
+            }
+        }
         private void btnEnterCal_Click(object sender, EventArgs e)
         {
             int i=0;
             byte[] frame = new byte[14];
 
+            i = 0;
+            if (cbPTMode.Text == "PT100")
+            {
+
+                frame[i++] = 0x01;
+                frame[i++] = 0x06;
+                frame[i++] = 0x00;
+                frame[i++] = 0x47;
+                frame[i++] = 0x00;
+                frame[i++] = 0x01;
+                frame[i++] = 0xf8;
+                frame[i++] = 0x1f;
+
+            }
+            else
+            {
+                frame[i++] = 0x01;
+                frame[i++] = 0x06;
+                frame[i++] = 0x00;
+                frame[i++] = 0x47;
+                frame[i++] = 0x00;
+                frame[i++] = 0x02;
+                frame[i++] = 0xb8;
+                frame[i++] = 0x1e;
+
+            }
+            sp1.Write(frame, 0, i);
+
+
+
+            Delay(100);
+
+
+            i = 0;
             frame[i++] = 0x01;
             frame[i++] = 0x06;
             frame[i++] = 0x00;
@@ -631,6 +679,9 @@ namespace serial
             btnCalAll.Enabled = true;
             btnSendAdjustRx.Enabled = true;
             btnSendAdjustPt100.Enabled = true;
+            cbPTMode.Enabled = false;
+
+
         }
         private void btnExitCal_Click(object sender, EventArgs e)
         {
@@ -646,6 +697,7 @@ namespace serial
             btnCalAll.Enabled = false;
             btnSendAdjustRx.Enabled = false;
             btnSendAdjustPt100.Enabled = false;
+            cbPTMode.Enabled = true;
         }
 
         private void btnCalAll_Click(object sender, EventArgs e)
@@ -653,6 +705,41 @@ namespace serial
 
             btnSendAdjustPt100.PerformClick();
             btnSendAdjustRx.PerformClick();
+
+        }
+
+        private void cbPTMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            int i = 0;
+            byte[] frame = new byte[14];  
+            if(cbPTMode.Text == "PT100")
+            {
+
+                frame[i++] = 0x01;
+                frame[i++] = 0x06;
+                frame[i++] = 0x00;
+                frame[i++] = 0x47;
+                frame[i++] = 0x00;
+                frame[i++] = 0x01;
+                frame[i++] = 0xf8;
+                frame[i++] = 0x1f;
+
+            }
+            else
+            {
+                frame[i++] = 0x01;
+                frame[i++] = 0x06;
+                frame[i++] = 0x00;
+                frame[i++] = 0x47;
+                frame[i++] = 0x00;
+                frame[i++] = 0x02;
+                frame[i++] = 0xb8;
+                frame[i++] = 0x1e;
+
+            }
+            if(sp1.IsOpen == true)
+                sp1.Write(frame, 0, i);
 
         }
 

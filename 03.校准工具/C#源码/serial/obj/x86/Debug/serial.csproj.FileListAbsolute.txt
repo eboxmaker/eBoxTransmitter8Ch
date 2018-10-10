@@ -54,3 +54,16 @@ D:\群晖云同步盘\02.变送器项目\上位机\serial（桌面）\serial\obj
 D:\群晖云同步盘\02.变送器项目\上位机\serial（桌面）\serial\obj\x86\Debug\serial.csproj.GenerateResource.Cache
 D:\群晖云同步盘\02.变送器项目\上位机\serial（桌面）\serial\obj\x86\Debug\serial.exe.manifest
 D:\群晖云同步盘\02.变送器项目\上位机\serial（桌面）\serial\obj\x86\Debug\serial.application
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\obj\x86\Debug\serial.exe
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\obj\x86\Debug\serial.pdb
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\bin\Debug\serial.exe.manifest
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\bin\Debug\serial.application
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\bin\Debug\serial.exe
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\bin\Debug\serial.pdb
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\obj\x86\Debug\serial.csprojResolveAssemblyReference.cache
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\obj\x86\Debug\serial.main.resources
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\obj\x86\Debug\serial.Properties.Resources.resources
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\obj\x86\Debug\serial.csproj.GenerateResource.Cache
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\obj\x86\Debug\serial.TrustInfo.xml
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\obj\x86\Debug\serial.exe.manifest
+C:\Users\Administrator\Documents\eBoxTransmitter8Ch\03.校准工具\C#源码\serial\obj\x86\Debug\serial.application

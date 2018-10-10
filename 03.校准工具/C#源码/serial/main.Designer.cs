@@ -51,6 +51,8 @@
             this.btnSendAdjustPt100 = new System.Windows.Forms.Button();
             this.dgw1 = new System.Windows.Forms.DataGridView();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.btnCalAll = new System.Windows.Forms.Button();
+            this.btnEnterCal = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.tbDDCgetRptValue = new System.Windows.Forms.TextBox();
@@ -98,8 +100,7 @@
             this.label46 = new System.Windows.Forms.Label();
             this.tbRDDCid = new System.Windows.Forms.TextBox();
             this.tbRDDCch = new System.Windows.Forms.TextBox();
-            this.btnEnterCal = new System.Windows.Forms.Button();
-            this.btnCalAll = new System.Windows.Forms.Button();
+            this.cbPTMode = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -404,6 +405,7 @@
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.cbPTMode);
             this.groupBox6.Controls.Add(this.btnCalAll);
             this.groupBox6.Controls.Add(this.btnEnterCal);
             this.groupBox6.Controls.Add(this.label7);
@@ -469,6 +471,26 @@
             this.groupBox6.TabIndex = 21;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "帧格式";
+            // 
+            // btnCalAll
+            // 
+            this.btnCalAll.Location = new System.Drawing.Point(0, 394);
+            this.btnCalAll.Name = "btnCalAll";
+            this.btnCalAll.Size = new System.Drawing.Size(113, 23);
+            this.btnCalAll.TabIndex = 73;
+            this.btnCalAll.Text = "一起校准";
+            this.btnCalAll.UseVisualStyleBackColor = true;
+            this.btnCalAll.Click += new System.EventHandler(this.btnCalAll_Click);
+            // 
+            // btnEnterCal
+            // 
+            this.btnEnterCal.Location = new System.Drawing.Point(267, 413);
+            this.btnEnterCal.Name = "btnEnterCal";
+            this.btnEnterCal.Size = new System.Drawing.Size(119, 23);
+            this.btnEnterCal.TabIndex = 72;
+            this.btnEnterCal.Text = "进入校准模式";
+            this.btnEnterCal.UseVisualStyleBackColor = true;
+            this.btnEnterCal.Click += new System.EventHandler(this.btnEnterCal_Click);
             // 
             // label7
             // 
@@ -876,25 +898,15 @@
             this.tbRDDCch.Size = new System.Drawing.Size(76, 21);
             this.tbRDDCch.TabIndex = 7;
             // 
-            // btnEnterCal
+            // cbPTMode
             // 
-            this.btnEnterCal.Location = new System.Drawing.Point(267, 413);
-            this.btnEnterCal.Name = "btnEnterCal";
-            this.btnEnterCal.Size = new System.Drawing.Size(119, 23);
-            this.btnEnterCal.TabIndex = 72;
-            this.btnEnterCal.Text = "进入校准模式";
-            this.btnEnterCal.UseVisualStyleBackColor = true;
-            this.btnEnterCal.Click += new System.EventHandler(this.btnEnterCal_Click);
-            // 
-            // btnCalAll
-            // 
-            this.btnCalAll.Location = new System.Drawing.Point(0, 394);
-            this.btnCalAll.Name = "btnCalAll";
-            this.btnCalAll.Size = new System.Drawing.Size(113, 23);
-            this.btnCalAll.TabIndex = 73;
-            this.btnCalAll.Text = "一起校准";
-            this.btnCalAll.UseVisualStyleBackColor = true;
-            this.btnCalAll.Click += new System.EventHandler(this.btnCalAll_Click);
+            this.cbPTMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbPTMode.FormattingEnabled = true;
+            this.cbPTMode.Location = new System.Drawing.Point(265, 387);
+            this.cbPTMode.Name = "cbPTMode";
+            this.cbPTMode.Size = new System.Drawing.Size(121, 20);
+            this.cbPTMode.TabIndex = 74;
+            this.cbPTMode.SelectedIndexChanged += new System.EventHandler(this.cbPTMode_SelectedIndexChanged);
             // 
             // main
             // 
@@ -1003,6 +1015,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Button btnEnterCal;
         private System.Windows.Forms.Button btnCalAll;
+        private System.Windows.Forms.ComboBox cbPTMode;
     }
 }
 
