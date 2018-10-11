@@ -28,9 +28,10 @@ uint16_t ddc_send_buf(uint8_t* buf, uint16_t buflen)
 //        uart1.printf("0X%02X ",*buf++);
 //    uart1.println();
     PA4.set();
-    delay_ms(1);
+    delay_ms(2);
     uart2.write(buf,buflen);
-    delay_ms(1);
+    uart2.flush();
     PA4.reset();
+
     return buflen;
 }

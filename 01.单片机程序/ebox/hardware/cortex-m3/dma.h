@@ -27,6 +27,10 @@ typedef void (*DmaIrqHandler_t)(uint32_t id, DmaIrqType type);
 class Dma
 {
     public:
+        DMA_Channel_TypeDef* DMAy_Channelx;
+    
+    
+    public:
         Dma(DMA_Channel_TypeDef* DMAy_Channelx);
         
         void rcc_enable();
@@ -40,7 +44,10 @@ class Dma
         void init(DMA_InitTypeDef* DMA_InitStruct);
         void enable();
         void disable();
-    
+        void set_current_len(uint16_t len);
+        bool get_flag_status();
+        void clear_flag();
+
         DMA_Channel_TypeDef* get_dma_ch();
 
     
@@ -72,11 +79,6 @@ class Dma
 
     
     
-    
-    
-    
-    private:
-        DMA_Channel_TypeDef* DMAy_Channelx;
     protected:
         FunctionPointer _irq[3];
 

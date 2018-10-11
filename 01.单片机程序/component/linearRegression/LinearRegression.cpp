@@ -1,6 +1,7 @@
 
 #include "LinearRegression.h"
 #include "string.h"
+#include "ebox_mem.h"
 
 // 求线性回归方程：Y = a + bx
 // dada[rows*2]数组：X, Y；rows：数据行数；a, b：返回回归系数
@@ -45,7 +46,7 @@ int linear_regression(double *data, int rows, double *a, double *b, double *Squa
 
 void free_data(double **dat, double *d, int count)
 {
-    int i;
+    int i, j;
     ebox_free(d);
     for (i = 0; i < count; i ++)
         ebox_free(dat[i]);

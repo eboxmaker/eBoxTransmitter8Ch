@@ -27,7 +27,7 @@
 
 
 #include "ebox_gpio.h"
-#include "ebox_can.h"
+#include "ebox_adc.h"
 #include "ebox_exti.h"
 #include "ebox_timer.h"
 #include "ebox_pwm.h"
@@ -36,28 +36,20 @@
 #include "ebox_i2c.h"
 #include "ebox_spi.h"
 #include "ebox_uart.h"
+//#include "ebox_uart_stream.h"
 #include "ebox_rtc.h"
 #include "ebox_iflash.h"
 #include "ebox_dac.h"
 #include "ebox_wdg.h"
-#include "ebox_slave_spi.h"
-
-#include "stdio.h"
+#include "ebox_can.h"
+#include "ebox_step_motor.h"
+//#include "ebox_3steper.h"
 
 extern "C"{
 void ebox_init(void);
-void ebox_printf_flush(void);
 }
 
-////////系统debug支持////////////////////////////////////////////////////////////////
-#define EBOX_DEBUG 1
-#if EBOX_DEBUG
-extern Uart uart1;//根据不同的串口名称此处需要做相应的修改
-#define DBG(...) uart1.printf(__VA_ARGS__)
-#else
-#define  DBG(...)
-#endif
-////////////////////////////////////////////////////////////////////////////////
+
 //创建所有引脚对象和宏定义其指针
 extern Uart uart1;
 extern Uart uart2;
@@ -71,15 +63,14 @@ extern mcuSpi spi1;
 extern mcuSpi spi2;
 extern SoftSpi sspi1;
 extern SoftSpi sspi2;
-extern SlaveSpi slave_spi1;
 
 extern mcuI2c i2c1;
 extern mcuI2c i2c2;
-extern SoftI2c si2c;
-extern SoftI2c si2c1;
-extern SoftI2c si2c2;
+//extern SoftI2c si2c;
+//extern SoftI2c si2c1;
+//extern SoftI2c si2c2;
 
-extern Can can1;
+//extern Can can1;
 
 extern mcuGpio PA0;
 extern mcuGpio PA1;

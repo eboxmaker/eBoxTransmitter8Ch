@@ -1,8 +1,8 @@
 
 #include "adjust.h"
 #include "ddc.h"
-#include "bsp.h"
-#include "mbuser.h"
+#include "bsp_ebox.h"
+#include "ebox_mem.h"
 
 uint8_t adjust_flag_rx,adjust_flag_pt;
 
@@ -58,11 +58,6 @@ void display(double *dat, double *Answer, double *SquarePoor, int rows, int cols
     }
 }
 
-
-void ddc_input()
-{
-    ddc_get_char(uart2.read());
-}
 
 void enter_adjust(uint8_t *ptr, uint16_t len)
 {
@@ -213,15 +208,8 @@ void calibrate()
     uint8_t len;
     uint32_t ajust_timer;
     
-    uart2.attach(ddc_input,RxIrq);
-    uart2.interrupt(RxIrq,ENABLE);
     ddc_init();
     ddc_attach_chx(20,enter_adjust);
-    timer2.begin(10);
-    timer2.attach(ddc_loop);
-    timer2.interrupt(ENABLE);
-    timer2.start();
-
 
 
     ddc_attach_chx(1,calibrate_rt);
@@ -249,11 +237,17 @@ void calibrate()
     }
     while(1)
     {
-       
+        if(uart2.available())
+        {
+            ddc_get_char(uart2.read());
+        }
+        
+        
+        ddc_loop();
+        
         if(is_enter_adjust_flag.value == 0x55aa)
         {
             is_enter_adjust_flag.value = 0;
-            modbus_init();
            return ;
         }
 
@@ -353,6 +347,7 @@ void calibrate()
             ddc_nonblocking(data3,8,DDC_NoAck,3);
             ddc_nonblocking(data4,8,DDC_NoAck,4);
             ddc_nonblocking(data5,4,DDC_NoAck,5);
+            ddc_nonblocking(data6,8,DDC_NoAck,6);
             ddc_nonblocking(data6,8,DDC_NoAck,6);
             delay_ms(10);
 

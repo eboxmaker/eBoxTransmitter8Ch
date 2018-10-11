@@ -11,7 +11,7 @@ void EventGpio::begin(uint8_t first_state)
 }
 void EventGpio::process()
 {
-    if( io->read() != state)
+    if( io->read() != state)		// 如果状态变化
     {
         if(changed == 0)
         {
@@ -20,18 +20,18 @@ void EventGpio::process()
         }    
         else
         {
-            if(( millis() - last_time ) > 5)
+//            if(( millis() - last_time ) > IO_EDGE_FILTER_COUNTS)
             {   
                 if(state == 1)
                 {
                     state = 0;
-                    if(event_neg_edge != (void*)(0))
+                    if(event_neg_edge != NULL)
                         event_neg_edge();
                 }
                 else
                 {
                     state = 1;
-                    if(event_pos_edge != (void*)(0))
+                    if(event_pos_edge != NULL)
                         event_pos_edge();
                 }
                 changed = 0;
@@ -39,24 +39,24 @@ void EventGpio::process()
 
         }
     }
-    if(state == first_state )
+    if(state == first_state )		
     {
-        if(click_pushed && (long_pressed == 0))
+        if(click_pushed && (long_pressed == 0))		// 单击
         {
             click_released = 1;
-            if(event_release !=  (void*)0)
+            if(event_release !=  NULL)
                 event_release();
         }
         click_pushed = 0;
         
-        if(event_high != (void *)0)
+        if(event_high != NULL)
             event_high();
     }
     else
     {
-         if(millis() - last_time > 5)
+         if(millis() - last_time > IO_EDGE_FILTER_COUNTS)
          {
-             if(event_long_press !=  (void*)0)//使用long_press，禁用click，如果使用long_press则触发long_press之后不会再触发release
+             if(event_long_press !=  NULL)//使用long_press，禁用click，如果使用long_press则触发long_press之后不会再触发release
             {
                 if(millis()  - last_time < 2000)
                 {   
@@ -68,7 +68,7 @@ void EventGpio::process()
                     if(click_pushed)
                     {
                         long_pressed = 1;
-                        if(event_long_press !=  (void*)0)
+                        if(event_long_press !=  NULL)
                             event_long_press();
                     }
                     click_released = 0;
@@ -79,12 +79,12 @@ void EventGpio::process()
                 if(click_pushed == 0)
                 {
                     click_pushed = 1;
-                    if(event_click !=  (void*)0)
+                    if(event_click !=  NULL)
                         event_click();
                 }
                 
             }
-            if((void*)0 != event_low)
+            if(NULL != event_low)
             {
                 event_low();
             }

@@ -19,13 +19,11 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "ebox_pwm.h"
+#define PWM_DEBUG 0
+#if PWM_DEBUG
+    #include "ebox.h"
+#endif
 
-
-
-#define TIMxCH1 0x01
-#define TIMxCH2 0x02
-#define TIMxCH3 0x03
-#define TIMxCH4 0x04
 
 
 
@@ -33,15 +31,15 @@ Pwm::Pwm(Gpio *pwm_pin)
 {
     //	if(isPwmPin(PWMpin))
     //	{
-    this->pwm_pin = pwm_pin;
+    this->pin = pwm_pin;
     //	}
 }
 void Pwm::begin(uint32_t frq, uint16_t duty)
 {
     this->duty = duty;
 
-    init_info(pwm_pin);
-    pwm_pin->mode(AF_PP);
+    init_info(pin);
+    pin->mode(AF_PP);
 
     set_oc_polarity(1);
     set_frq(frq);
@@ -51,20 +49,20 @@ void Pwm::base_init(uint16_t period, uint16_t prescaler)
 {
     this->period = period;//更新period
 
+    rcc_clock_cmd((uint32_t)TIMx,ENABLE);
 
-    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
 
     if(TIMx == TIM1 ||  TIMx == TIM8 )
     {
         TIM_CtrlPWMOutputs(TIMx,ENABLE); 
     }
         
-    rcc_clock_cmd((uint32_t)TIMx,ENABLE);
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
     TIM_TimeBaseStructure.TIM_Period = this->period - 1; //ARR
     TIM_TimeBaseStructure.TIM_Prescaler = prescaler - 1;
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up; //
-    TIM_TimeBaseInit(TIMx, &TIM_TimeBaseStructure);
     TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+    TIM_TimeBaseInit(TIMx, &TIM_TimeBaseStructure);
 
     TIM_ARRPreloadConfig(TIMx, ENABLE);
     TIM_Cmd(TIMx, ENABLE); //
@@ -165,19 +163,21 @@ void Pwm::set_frq(uint32_t frq)
     uint32_t period  = 0;
     uint32_t prescaler = 1;
     
-    
-    
     if(frq >= get_max_frq())//控制频率，保证其有1%精度
         frq = get_max_frq();
+
     
     //千分之一精度分配方案
     for(; prescaler <= 0xffff; prescaler++)
     {
         period = get_timer_source_clock() / prescaler / frq;
-        if((0xffff >= period) && (period >= 1000))
+        if(period <= 65535)
         {
-            accuracy = 1;
-            break;
+            if((0xffff >= period) && (period >= 1000))
+            {
+                accuracy = 1;
+                break;
+            }
         }
     }
     
@@ -187,15 +187,32 @@ void Pwm::set_frq(uint32_t frq)
         for(prescaler = 1; prescaler <= 0xffff; prescaler++)
         {
             period = get_timer_source_clock() / prescaler / frq;
-            if((0xffff >= period) && (period >= 100))
+            if(period <= 65535)
             {
-            accuracy = 2;
-            break;
+                if((0xffff >= period) && (period >= 100))
+                {
+                    accuracy = 2;
+                    break;
+                }         
             }
         }
-    }
-
-
+    } 
+    if(prescaler == 65536)//上述算法分配失败
+    {
+        //百分之二分配方案
+        for(prescaler = 1; prescaler <= 0xffff; prescaler++)
+        {
+            period = get_timer_source_clock() / prescaler / frq;
+            if(period <= 65535)
+            {
+                if((0xffff >= period) && (period >= 50))
+                {
+                    accuracy = 3;
+                    break;
+                }   
+            }            
+        }
+    }     
     base_init(period, prescaler);
     _set_duty(duty);
 
@@ -295,7 +312,7 @@ uint32_t Pwm::get_timer_source_clock()
 }
 uint32_t Pwm::get_max_frq()
 {
-    return get_timer_source_clock()/100;
+    return get_timer_source_clock()/50;
 
 }
 float Pwm::get_accuracy()
@@ -309,29 +326,31 @@ float Pwm::get_accuracy()
             return 0.001;
         case 2:
             return 0.01;
+        case 3:
+            return 0.02;
 
     }
     return 0.001;
 
 
 }
-
-
+void Pwm::enable_pin()
+{
+    pin->mode(AF_PP);
+}
+void Pwm::disable_pin()
+{
+    pin->mode(INPUT);
+}
+void Pwm::end()
+{
+    
+}
 //duty:0-1000对应0%-100.0%
 void analog_write(Gpio *pwm_pin, uint16_t duty)
 {
-    //	if(isPwmPin(PWMpin))
-    //	{
     Pwm p(pwm_pin);
     p.begin(1000, duty);
-    //p.SetFrq(1000,1);
-    //			p._set_duty(duty);
-
-    //	}
-    //	else
-    //	{
-    //	;
-    //	}
 }
 
 //////////////////////////////////////////////////////////////

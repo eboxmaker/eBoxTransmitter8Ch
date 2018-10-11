@@ -1,13 +1,9 @@
 #ifndef __DDC_H
 #define __DDC_H
-
-
-#ifdef __cplusplus
- extern "C" {
-#endif
      
      
 #include "stdio.h"
+#include "fifo.h"
 #include "ddc_port.h"
 #include "ddc_list.h"
      
@@ -66,8 +62,5 @@ void        print_frame(uint8_t *frame);
 void        print_list(DdcNode_t *list);
 void        ddc_check_ack_list(void);
 
-#ifdef __cplusplus
-    }
-#endif
 
 #endif 

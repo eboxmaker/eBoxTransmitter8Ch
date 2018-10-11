@@ -1,10 +1,13 @@
 #ifndef __NVIC_H
 #define __NVIC_H
 
+
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include "ebox_cfun.h"
+    
 #include "mcu_config.h"
 
 typedef struct
@@ -25,6 +28,7 @@ void nvic_dev_enable(uint32_t dev,uint8_t index ) ;
 void nvic_dev_disable(uint32_t dev,uint8_t index ) ;
 
 void nvic_irq_set_priority(IRQn_Type irq_num, uint8_t PreemptionPriority,uint8_t SubPriority) ;
+void nvic_irq_get_priority(uint8_t irq_num, uint8_t *PreemptionPriority,uint8_t *SubPriority) ;
 void nvic_irq_enable(IRQn_Type irq_num) ;
 void nvic_irq_disable(IRQn_Type irq_num) ;
 

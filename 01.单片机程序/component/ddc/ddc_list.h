@@ -1,11 +1,9 @@
 #ifndef __DDC_LIST_H
 #define __DDC_LIST_H
 
-#ifdef __cplusplus
- extern "C" {
-#endif
-     
-#include "ebox_type.h"
+
+#include "ebox_core.h"
+#include "ebox_mem.h"
 
 
 typedef struct DdcNode
@@ -23,8 +21,5 @@ uint16_t    list_get_size(DdcNode_t *head);
 void        list_free(DdcNode_t *head);
 
 
-#ifdef __cplusplus
-}
-#endif
 
 #endif 

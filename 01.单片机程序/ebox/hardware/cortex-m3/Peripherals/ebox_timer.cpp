@@ -21,20 +21,6 @@
 #include "ebox_timer.h"
 #include "ebox_timer_it.h"
 
-static tim_irq_handler irq_handler;
-static uint32_t tim_irq_ids[TIM_IRQ_ID_NUM];
-
-int tim_irq_init(uint8_t index,tim_irq_handler handler,uint32_t id)
-{
- tim_irq_ids[index] = id;
- irq_handler =  handler;
- return 0;
-}
-
-void tim_irq_callback(uint8_t index)
-{
-	irq_handler(tim_irq_ids[index]);
-}
 
 //////////////////////////////////////
 
@@ -87,8 +73,8 @@ void Timer::begin(uint32_t frq)
     rcc_clock_cmd((uint32_t)_TIMx,ENABLE);
 
     base_init(_period, _prescaler);
-    nvic(ENABLE,0,0);
-    interrupt(ENABLE);
+    nvic(DISABLE,0,0);
+    interrupt(DISABLE);
 }
 void Timer::reset_frq(uint32_t frq)
 {
@@ -97,14 +83,14 @@ void Timer::reset_frq(uint32_t frq)
 }
 void Timer::nvic(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority)
 {
-    nvic_dev_set_priority((uint32_t)_TIMx,0,0,0);
+    nvic_dev_set_priority((uint32_t)_TIMx,0,preemption_priority,sub_priority);
     if(enable != DISABLE)
         nvic_dev_enable((uint32_t)_TIMx,0);
     else
         nvic_dev_disable((uint32_t)_TIMx,0);
 }
 
-void Timer::interrupt(FunctionalState enable, uint8_t preemption_priority, uint8_t sub_priority)
+void Timer::interrupt(FunctionalState enable)
 {
     TIM_ClearITPendingBit(_TIMx , TIM_FLAG_Update);//必须加，否则开启中断会立即产生一次中断
     TIM_ITConfig(_TIMx, TIM_IT_Update, enable);
@@ -135,7 +121,7 @@ void Timer::base_init(uint16_t period, uint16_t prescaler)
     TIM_TimeBaseStructure.TIM_Period = period - 1; //ARR寄存器
     TIM_TimeBaseStructure.TIM_Prescaler = prescaler - 1;
     TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up; //单边斜坡
-    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV4;
+    TIM_TimeBaseStructure.TIM_ClockDivision = TIM_CKD_DIV1;
 
     TIM_TimeBaseInit(_TIMx, &TIM_TimeBaseStructure);
     TIM_ARRPreloadConfig(_TIMx, ENABLE);	//控制ARR寄存器是否使用影子寄存器
@@ -172,7 +158,7 @@ uint32_t Timer::get_timer_source_clock()
 }
 uint32_t Timer::get_max_frq()
 {
-    return get_timer_source_clock()/400;
+    return get_timer_source_clock();
 
 }
 

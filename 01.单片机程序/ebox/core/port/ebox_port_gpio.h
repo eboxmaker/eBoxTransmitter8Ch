@@ -1,30 +1,30 @@
 #ifndef __EBOX_PORT_GPIO_H
 #define __EBOX_PORT_GPIO_H
-#include "../core/ebox_type.h"
+#include "ebox_type.h"
 
 typedef enum
 {
     OUTPUT      = 0x00, 
     
-    OUTPUT_PP   = 0x10,    
+    OUTPUT_PP   ,    
     OUTPUT_PP_PU    ,    
     OUTPUT_PP_PD    ,
     
-    OUTPUT_OD   = 0x20,
+    OUTPUT_OD   ,
     OUTPUT_OD_PU    ,
     OUTPUT_OD_PD    ,
     
-    AIN         = 0x30,
+    AIN          ,
     
-    INPUT       = 0x40,
+    INPUT       ,
     INPUT_PD        ,
     INPUT_PU        ,
     
-    AF_OD       = 0x50,
+    AF_OD        ,
     AF_OD_PU        ,   
     AF_OD_PD        ,
     
-    AF_PP       = 0x60,      
+    AF_PP        ,      
     AF_PP_PU        ,
     AF_PP_PD        ,
 }PIN_MODE;
@@ -59,6 +59,7 @@ typedef enum
     PI8_ID,         PI9_ID,     PI10_ID,    PI11_ID,    PI12_ID,    PI13_ID,    PI14_ID,    PI15_ID,
     
 }PIN_ID_t;///<引脚的名字
+
 class Gpio
 {
     public:
@@ -67,16 +68,13 @@ class Gpio
     virtual void mode(PIN_MODE mode,uint8_t af_configration) = 0;
     virtual void set() = 0;
     virtual void reset() = 0;
-    virtual void write(uint8_t val) = 0;
-    virtual void toggle() = 0;
+
+	virtual void write(uint8_t val) = 0;
     virtual void read(uint8_t *val) = 0;
     virtual uint8_t read(void) = 0;
+	virtual void toggle() = 0;
         
     PIN_ID_t id;
-
-
-
-
 };
 
 #endif
