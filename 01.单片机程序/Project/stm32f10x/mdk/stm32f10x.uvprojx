@@ -805,31 +805,6 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>user</GroupName>
-          <Files>
-            <File>
-              <FileName>main.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\main.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>bsp_ebox.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\board\spark_f1\bsp_ebox.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>pt100.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\pt100.cpp</FilePath>
-            </File>
-            <File>
-              <FileName>adjust.cpp</FileName>
-              <FileType>8</FileType>
-              <FilePath>..\..\..\user\adjust.cpp</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
           <GroupName>edriver</GroupName>
           <Files>
             <File>
@@ -871,6 +846,31 @@
               <FileName>ddc_list.cpp</FileName>
               <FileType>8</FileType>
               <FilePath>..\..\..\component\ddc\ddc_list.cpp</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>user</GroupName>
+          <Files>
+            <File>
+              <FileName>main.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\main.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>bsp_ebox.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\board\spark_f1\bsp_ebox.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>pt100.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\pt100.cpp</FilePath>
+            </File>
+            <File>
+              <FileName>adjust.cpp</FileName>
+              <FileType>8</FileType>
+              <FilePath>..\..\..\user\adjust.cpp</FilePath>
             </File>
           </Files>
         </Group>

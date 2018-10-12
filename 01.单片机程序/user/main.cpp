@@ -153,7 +153,7 @@ void update_temp()
     set_channel(ch);
     rc_delay = millis();
     PA5.set();
-    while(millis() - rc_delay < 100)
+    while(millis() - rc_delay < 50)
     {
         mb.task();
     }
@@ -180,6 +180,7 @@ void update_temp()
 
         //计算温度
         pt100.temp.value = RtoT(pt100.rt.value,pt100.ptType);
+        pt100.temp.value = round(pt100.temp.value*10)/10.0;
     }
     
     //更新
