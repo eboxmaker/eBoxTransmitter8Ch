@@ -1,0 +1,9 @@
+Output: Bill of Materials
+Type  : BOM
+From  : Project [PTXC8S2.PrjPcb]
+
+
+Files Generated   : 0
+Documents Printed : 0
+
+Finished Output Generation At 13:39:09 On 2018/10/12

@@ -1,0 +1,42 @@
+Field=Comment~String~Comment~100|Field=Description~String~Description~100|Field=Designator~String~Designator~100|Field=Footprint~String~Footprint~100|Field=LibRef~String~LibRef~100|Field=Quantity~Integer~Quantity~100|ReportField=ProductionQuantity~1|ReportField=ProjectFileName~PTXC8S2.PrjPcb|ReportField=ProjectFullPath~C:\Users\Administrator\Documents\eBoxTransmitter8Ch\02.PCB\PTXC8S2-v2\PTXC8S2.PrjPcb|ReportField=Title~Bill of Materials For PCB Document [PTx-V2.PcbDoc]|ReportField=TotalQuantity~123|ReportField=ReportTime~13:38:59|ReportField=ReportDate~2018/10/12|ReportField=ReportDateTime~2018/10/12 13:38:59|ReportField=OutputName~Bill of Materials|ReportField=OutputType~BOM_PartType|ReportField=GeneratorName~BOM|ReportField=GeneratorDescription~Bill of Materials|ReportField=VariantName~None|ReportField=DataSourceFileName~PTx-V2.PcbDoc|ReportField=DataSourceFullPath~C:\Users\Administrator\Documents\eBoxTransmitter8Ch\02.PCB\PTXC8S2-v2\PTx-V2.PcbDoc
+BEAD|磁珠|B1, B2, B3|0603L|BEAD|3
+0.1uF/4KV|普通小电容|C1, C2|RAD0.2|CAP|2
+4.7uF|普通小电容|C3, C7|0805C|CAP|2
+10uF|钽电容|C4, C8, C9, C11, C13, C15, C17, C19, C20, C24|3216C|CAP-T|10
+2.2uF/50V|普通小电容|C5, C6|0805C|CAP|2
+0.1uF|普通小电容|C10, C12, C21, C22, C25, C26, C27, C28, C29, C30, C33, C34, C35|0603C|CAP|13
+1uF|普通小电容|C14|0603C|CAP|1
+10nF|普通小电容|C16, C18|0603C|CAP|2
+470P|普通小电容|C23|0603C|CAP|1
+22P|普通小电容|C31, C32|0603C|CAP|2
+SS14|肖特基二极管|D1, D21|SOD123|D-S|2
+PESD5V0L2BT|schottky diod|D2, D3, D4, D5, D6, D7, D8, D9, D10, D11, D12, D13, D14, D15, D16, D17, D18, D19, D20|SOT23A|PESD5V0L2BT|19
+LED|LED|LED1, LED2|LED-3|LED|2
+Header 5|Header, 5-Pin|P1, P2|KF2DEG-3.81-5|Header 5|2
+Header 3|Header, 3-Pin|P3, P4, P5, P6, P7, P8, P9, P10|KF2DEG-3.81-3|Header 3|8
+Header 5X2|Header, 5-Pin, Dual row|P11|DC2.54-10|Header 5X2|1
+S9014|NPN三极管|Q1, Q2, Q3|SOT23A|NPN|3
+1M|普通电阻|R1, R2|0805R|RES|2
+10K|普通电阻|R3, R7, R8, R10, R11, R13, R15, R18, R19, R20, R22, R23, R26, R28|0603R|RES|14
+50R|普通电阻|R4, R29|0603R|RES|2
+30K|普通电阻|R5|0603R|RES|1
+1K|普通电阻|R6, R9, R12, R14, R16, R21, R24|0603R|RES|7
+47K|普通电阻|R17|0603R|RES|1
+100R|普通电阻|R25|0603R|RES|1
+120R|普通电阻|R27|0603R|RES|1
+2.5K|普通电阻|R30|0603R|RES|1
+2.7K|普通电阻|R31|0603R|RES|1
+TP|testpoint|T1|TP1|TP|1
+TP|testpoint|T2|TESTP|TP|1
+D240505S|24V转双5V隔离DCDC|U1|D240505S-2W|D240505S-2W|1
+JDQ(G6S-2)|继电器（G6S-2 5VDC）|U2, U14|JDQ-G6S-2|JDQ(G6S-2)|2
+CD4051|模拟多路复用器|U3, U5, U7|SOP16|CD4051|3
+OPA4330AIPWR|输出轨到轨，4运放|U4|TSSOP14-65|OPA4330|1
+TL431|TL431|U6|SOT-89|TL431|1
+MIC5219||U8|SOT23-5|MIC5219|1
+ADS1118|16位 ADC|U9|TSSOP10|ADS1118|1
+STM32F103||U10|LQFP48|STM32F103|1
+TLP281|TLP281 光耦|U11|SOP4|TLP281|1
+ADUM3201||U12|SOP8|ADUM3201|1
+BL3085B|BL3085B 15KV防静电485|U13|SOP8|BL3085B|1
+8M|晶振|XT1|5032|XT|1

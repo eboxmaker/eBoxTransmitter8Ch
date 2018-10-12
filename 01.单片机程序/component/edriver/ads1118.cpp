@@ -1,5 +1,5 @@
 #include "ads1118.h"
-
+#include "bsp_ebox.h"
 Ads1118::Ads1118(Gpio *cs,Spi *spi)
 {
     this->cs = cs;
@@ -127,7 +127,8 @@ float Ads1118::read_average(uint8_t ch)
     for(int i = 0; i < 9; i++)
     {
         sum += read(ch);
-//        delay_ms(10);
+       // delay_ms(1);
+        mb.task();
     }
     sum = sum/9.0;
     return sum;

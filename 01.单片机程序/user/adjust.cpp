@@ -115,11 +115,13 @@ void calibrate_rt(uint8_t *ptr, uint16_t len )
         
  
         ddc_nonblocking(&pt100.ccPt.byte[0],8,DDC_NoAck,10);
+        ddc_nonblocking(&pt100.ccPt.byte[0],8,DDC_NoAck,10);
 
     }
     ebox_memcpy(&data[0],pt100.ratioPt.byte,8);
     ebox_memcpy(&data[8],pt100.offsetPt.byte,8);
     
+    ddc_nonblocking(data,16,DDC_NoAck,11);
     ddc_nonblocking(data,16,DDC_NoAck,11);
 
     adjust_flag_pt = 1;
@@ -176,11 +178,13 @@ void calibrate_rx(uint8_t *ptr, uint16_t len )
         pt100.ccRx.value = sqrt(SquarePoor[0] / (SquarePoor[0] + SquarePoor[1]));
         
         ddc_nonblocking(pt100.ccRx.byte,8,DDC_NoAck,10);
+        ddc_nonblocking(pt100.ccRx.byte,8,DDC_NoAck,10);
 
 
     }
     ebox_memcpy(&data[0],pt100.ratioRx.byte,8);
     ebox_memcpy(&data[8],pt100.offsetRx.byte,8);    
+    ddc_nonblocking(data,16,DDC_NoAck,11);
     ddc_nonblocking(data,16,DDC_NoAck,11);
 
 
@@ -237,9 +241,11 @@ void calibrate()
     }
     while(1)
     {
-        if(uart2.available())
+        uint8_t len = uart2.available();
+        if(len > 0)
         {
-            ddc_get_char(uart2.read());
+            for(int i = 0; i < len; i++ )
+                ddc_get_char(uart2.read());
         }
         
         
@@ -254,19 +260,10 @@ void calibrate()
 
         if(millis() - ajust_timer > 1000)
         {
-//        uart1.printf("\r\nfree:%d\r\n",ebox_get_free());
             PA5.toggle();
-//            if(adjust_check() == true)
-//            {
-//                uart1.printf("\r\noffset rx:%f\r\n",pt100.offsetRx.value);
-//                uart1.printf("ratio rx:%f\r\n",pt100.ratioRx.value);
-//                uart1.printf("cc rx:%f\r\n",pt100.ccRx.value);
-//                
-//                uart1.printf("offset pt:%f\r\n",pt100.offsetPt.value);
-//                uart1.printf("ratio pt:%f\r\n",pt100.ratioPt.value);
-//                uart1.printf("cc pt:%f\r\n",pt100.ccPt.value);
-//            }
+
             ajust_timer = millis();
+//AIN0通道
             adc_value.value = adc.read_average(ADC_AIN0);
             adc_voltage.value = adc.adc_to_voltage(adc_value.value);
             data1[0] = adc_value.byte[0];
@@ -278,6 +275,7 @@ void calibrate()
             data1[6] = adc_voltage.byte[2];
             data1[7] = adc_voltage.byte[3];
 
+//AIN1通道
             adc_value1.value = adc.read_average(ADC_AIN1);
             adc_voltage1.value = adc.adc_to_voltage(adc_value1.value);
             data2[0] = adc_value1.byte[0];
@@ -327,7 +325,7 @@ void calibrate()
 
 
 //温度和电阻数据
-            pt100.rt.value = adc_value2.value * pt100.ratioPt.value + pt100.offsetPt.value - 2 * pt100.rx.value;
+            pt100.rt.value = adc_value2.value * pt100.ratioPt.value + pt100.offsetPt.value;// - 2 * pt100.rx.value;
             
             pt100.temp.value = RtoT(pt100.rt.value,pt100.ptType);
 
@@ -340,7 +338,6 @@ void calibrate()
             data6[6] = pt100.temp.byte[2];
             data6[7] = pt100.temp.byte[3];
             
-            delay_ms(10);
             
             ddc_nonblocking(data1,8,DDC_NoAck,1);
             ddc_nonblocking(data2,8,DDC_NoAck,2);
@@ -349,7 +346,6 @@ void calibrate()
             ddc_nonblocking(data5,4,DDC_NoAck,5);
             ddc_nonblocking(data6,8,DDC_NoAck,6);
             ddc_nonblocking(data6,8,DDC_NoAck,6);
-            delay_ms(10);
 
 
             if(adjust_flag_rx == 1 && adjust_flag_pt == 1)

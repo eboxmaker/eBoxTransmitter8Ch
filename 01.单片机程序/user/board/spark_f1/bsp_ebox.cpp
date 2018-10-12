@@ -21,6 +21,9 @@
 #include "bsp_ebox.h"
 #include "ebox_mem.h"
 
+
+ModbusSerial mb;
+
 DataU32_t is_enter_adjust_flag;
 Ads1118 adc(&PB12,&spi2);
 Flash iflash;

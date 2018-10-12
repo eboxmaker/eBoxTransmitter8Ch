@@ -1,8 +1,7 @@
 #include "ebox.h"
 #include "bsp_ebox.h"
 #include "ddc.h"
-#include <Modbus.h>
-#include <ModbusSerial.h>
+
 
 #include "adjust.h"
 /**
@@ -19,7 +18,6 @@
 #define EXAMPLE_DATE	"2018-08-13"
 
 
-ModbusSerial mb;
 
 #define MB_HOLD_OFFSET 40
 
@@ -124,15 +122,15 @@ int main(void)
 
 void hold_update_ch(uint8_t ch,PtData_t *pt)
 {
-    mb.Hreg(ch+40,(word)pt->temp.value*10);
-    mb.Hreg(ch+40 + 20,(word)pt->rx.value*100);
+    mb.Hreg(ch+40,(word)(pt->temp.value*10));
+    mb.Hreg(ch+40 + 20,(word)(pt->rx.value*100));
 
     if(pt->ptType == PT10)
-        mb.Hreg(ch + 40 + 10,(word)pt->rt.value*1000);
+        mb.Hreg(ch + 40 + 10,(word)(pt->rt.value*1000));
     else if(pt->ptType == PT100)
-        mb.Hreg(ch + 40 + 10,(word)pt->rt.value*100);
+        mb.Hreg(ch + 40 + 10,(word)(pt->rt.value*100));
     else if(pt->ptType == PT1000)
-        mb.Hreg(ch + 40 + 10,(word)pt->rt.value*10);
+        mb.Hreg(ch + 40 + 10,(word)(pt->rt.value*10));
 }
 
 
@@ -155,23 +153,34 @@ void update_temp()
     set_channel(ch);
     rc_delay = millis();
     PA5.set();
-    while(millis() - rc_delay < 50)
+    while(millis() - rc_delay < 100)
     {
         mb.task();
     }
     PA5.reset();
     
     //得去ADC
-    adc_value.value = adc.read_average(ADC_AIN0);
+//    adc_value.value = adc.read_average(ADC_AIN0);
+        mb.task();
     adc_value1.value = adc.read_average(ADC_AIN1);
+        mb.task();
     adc_value2.value = adc.read_average(ADC_AIN2);
+        mb.task();
 
     //计算电阻
     pt100.rx.value = adc_value1.value*pt100.ratioRx.value + pt100.offsetRx.value;
-    pt100.rt.value = adc_value2.value * pt100.ratioPt.value + pt100.offsetPt.value - 2*pt100.rx.value;
+    if(adc_value2.value > 32760)
+    {
+        pt100.rt.value = -999.9;
+        pt100.temp.value = -999.9;
+    }
+    else
+    {
+        pt100.rt.value = adc_value2.value * pt100.ratioPt.value + pt100.offsetPt.value - 2*pt100.rx.value;
 
-    //计算温度
-    pt100.temp.value = RtoT(pt100.rt.value,pt100.ptType);
+        //计算温度
+        pt100.temp.value = RtoT(pt100.rt.value,pt100.ptType);
+    }
     
     //更新
     hold_update_ch(ch,&pt100);

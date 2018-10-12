@@ -22,12 +22,16 @@
 #include "ebox.h"
 #include "ads1118.h"
 #include "pt100.h"
-
+#include <Modbus.h>
+#include <ModbusSerial.h>
 
 #define	HARDWARE	"ebox_spark£¬STM32F103C8T6"
 
 
 #define  DEFAULT_TYPE PT1000
+
+
+extern ModbusSerial mb;
 
 extern DataU32_t is_enter_adjust_flag;
 
